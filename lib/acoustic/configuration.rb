@@ -1,4 +1,4 @@
-module Rango
+module Acoustic
   class Configuration
     
     def initialize

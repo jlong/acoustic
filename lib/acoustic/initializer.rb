@@ -1,4 +1,4 @@
-module Rango
+module Acoustic
   class Initializer
     
     attr_accessor :project_root, :config
@@ -7,14 +7,14 @@ module Rango
       @project_root = project_root
       add_load_path project_root
       add_load_path project_root + "/lib"
-      require "rango/configuration"
+      require "acoustic/configuration"
       @config = Configuration.new
       initialize_configuration
     end
     
     def run
       config.load(project_root + "/settings.rb")
-      load_rango
+      load_acoustic
     end
     
     class << self
@@ -37,7 +37,7 @@ module Rango
         config[:additional_load_paths] = []
       end
       
-      def load_rango
+      def load_acoustic
         config[:additional_load_paths].reverse.each { add_load_path(path) }
       end
   end

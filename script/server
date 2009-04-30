@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require File.expand_path(File.dirname(__FILE__) + '/../') + '/boot'
-require "rango/webrick_dispatcher"
+require "acoustic/webrick_dispatcher"
 
 first, second  = (ARGV.last || '').split(':')
 ip = port = nil

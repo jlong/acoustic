@@ -1,5 +1,5 @@
 require 'webrick'
-require 'rango/dispatcher'
+require 'acoustic/dispatcher'
 
 class DispatchServlet < WEBrick::HTTPServlet::AbstractServlet
 
@@ -16,7 +16,7 @@ class DispatchServlet < WEBrick::HTTPServlet::AbstractServlet
   
   def initialize(server, options)
     @file_handler = WEBrick::HTTPServlet::FileHandler.new(server, options[:server_root])
-    @dispatcher = Rango::Dispatcher.new
+    @dispatcher = Acoustic::Dispatcher.new
   end
   
   def service(request, response)
