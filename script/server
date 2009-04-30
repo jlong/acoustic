@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+require File.expand_path(File.dirname(__FILE__) + '/../') + '/boot'
+require "rango/webrick_dispatcher"
+
+first, second  = (ARGV.last || '').split(':')
+ip = port = nil
+case first 
+when /^\d+$/
+  port = first.to_i
+when /\./
+  ip, port = first, second
+end
+
+DispatchServlet.dispatch(
+  :ip => ip || '0.0.0.0', 
+  :port => port || 3000,
+  :server_root => "#{PROJECT_ROOT}/public"
+)
