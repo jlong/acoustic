@@ -1,0 +1,1 @@
+connect 'articles/:action', :controller => :articles
