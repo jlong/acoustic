@@ -1,4 +1,4 @@
-class ArticlesController < AcousticPostsController
+class ArticlesController < Acoustic::Controller
   
   def new
     @article = Article.new

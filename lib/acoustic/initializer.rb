@@ -7,8 +7,8 @@ module Acoustic
       @project_root = project_root
       add_load_path project_root
       add_load_path project_root + "/lib"
-      require "acoustic/configuration"
-      @config = Configuration.new
+      require "acoustic/settings"
+      @config = Settings.new
       initialize_configuration
     end
     
@@ -23,6 +23,10 @@ module Acoustic
       def run(*args)
         @instance ||= new(*args)
         @instance.run 
+      end
+      
+      def method_missing(method, *args)
+        @instance.send(method, *args)
       end
     end
     
@@ -40,5 +44,6 @@ module Acoustic
       def load_acoustic
         config[:additional_load_paths].reverse.each { add_load_path(path) }
       end
+    
   end
 end

@@ -1,0 +1,1 @@
+connect '*', :controller => :articles, :action => :show
