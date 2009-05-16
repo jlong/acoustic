@@ -1,1 +1,1 @@
-connect '*', :controller => :articles, :action => :show
+connect '*', :controller => :hello, :action => :show
