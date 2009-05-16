@@ -1,1 +1,1 @@
-answer = 42
+answer = 210 / 5
