@@ -24,10 +24,6 @@ module Acoustic
         @instance ||= new(*args)
         @instance.run 
       end
-      
-      def method_missing(method, *args)
-        @instance.send(method, *args)
-      end
     end
     
     private
