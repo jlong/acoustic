@@ -14,6 +14,8 @@ module Acoustic
       controller = controller_from_symbol(params[:controller])
       action = params[:action]
       controller.process(action, params, request, response)
+    rescue Acoustic::UnresolvableUriError
+      raise Acoustic::NotFoundError
     end
     
     private

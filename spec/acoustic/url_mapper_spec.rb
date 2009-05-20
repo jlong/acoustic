@@ -36,7 +36,7 @@ describe Acoustic::UrlMapper do
   
   it 'should raise an error when the URI cannot be resolved' do
     load :empty
-    lambda { resolve('/unresolvable') }.should raise_error(Acoustic::NotFoundError)
+    lambda { resolve('/unresolvable') }.should raise_error(Acoustic::UnresolvableUriError)
   end
   
   def load(symbol)

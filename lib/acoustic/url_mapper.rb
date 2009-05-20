@@ -20,7 +20,7 @@ module Acoustic
       if rule
         rule.extract(uri)
       else
-        raise Acoustic::NotFoundError
+        raise Acoustic::UnresolvableUriError
       end
     end
     
