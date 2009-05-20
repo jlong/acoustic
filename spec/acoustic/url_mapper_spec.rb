@@ -14,24 +14,32 @@ end
 
 describe Acoustic::UrlMapper do
   
-  before do
-    @mapper = Acoustic::UrlMapper.new
-  end
-  
   it 'should load an empty file without errors' do
     load :empty
   end
   
   it 'should resolve a URI with a basic connect statement' do
     load :basic
-    @mapper.resolve_uri(URI.parse('http://localhost/first')).should == [TestController, :first, {}]
-    @mapper.resolve_uri(URI.parse('http://localhost/second')).should == [TestController, :second, {}]
-    @mapper.resolve_uri(URI.parse('http://localhost/another')).should == [AnotherTestController, :index, {}]
-    @mapper.resolve_uri(URI.parse('http://localhost/another?test=1')).should == [AnotherTestController, :index, {:test=>'1'}]
+    resolve('/first').should == [TestController, :first, {}]
+    resolve('/second').should == [TestController, :second, {}]
+    resolve('/another').should == [AnotherTestController, :index, {}]
+    resolve('/another?test=1').should == [AnotherTestController, :index, {:test=>'1'}]
+    resolve('/another?test1=1&test2=2').should == [AnotherTestController, :index, {:test1=>'1', :test2=>'2'}]
+  end
+  
+  it 'should resolve a URI with params in the path' do
+    load :params
+    resolve('/test/first').should == [TestController, :first, {}]
+    resolve('/test/second').should == [TestController, :second, {}]
+    resolve('/another_test/index').should == [AnotherTestController, :index, {}]
   end
   
   def load(symbol)
+    @mapper = Acoustic::UrlMapper.new
     @mapper.load(FIXTURES_ROOT + "/urls/#{symbol}.rb")
   end
-
+  
+  def resolve(path)
+    @mapper.resolve_uri(URI.parse("http://localhost#{path}"))
+  end
 end

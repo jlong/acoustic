@@ -27,27 +27,36 @@ module Acoustic
     # Helper Classes
     
     class Rule
-      attr_accessor :path, :controller_symbol, :action
-      
-      def initialize(path, controller_symbol, action)
-        @path, @controller_symbol, @action = path, controller_symbol, action
+      def initialize(path, options)
+        @path, @options = path, options
+        @regexp, @capture_symbols = extract_regexp_and_capture_symbols(path)
       end
       
       def match?(uri)
-        match_path = uri.path
-        match_path = $1 if match_path =~ %r{^/(.*)$}
-        path == match_path
+        !@regexp.match(uri.path).nil?
       end
       
       def extract(uri)
-        [controller, action, extract_params(uri)]
-      end
-      
-      def controller
-        @controller ||= constantize(camelize("#{controller_symbol}_controller"))
+        matches = @regexp.match(uri.path)
+        params = extract_params(uri)
+        params[:controller] = @options[:controller] if @options.has_key? :controller
+        params[:action] = @options[:action] if @options.has_key? :action
+        matches.captures.each_with_index do |value, index|
+          key = @capture_symbols[index]
+          raise "key should never be nil!" if key.nil?
+          value = value.intern if [:controller, :action].include?(key)
+          params[key] = value
+        end
+        controller, action = controller_from_symbol(params.delete(:controller)), params.delete(:action)
+        [controller, action, params]
       end
       
       private
+        
+        def controller_from_symbol(symbol)
+          constantize(camelize("#{symbol}_controller"))
+        end
+        
         def camelize(lower_case_and_underscored_word, first_letter_in_uppercase = true)
           if first_letter_in_uppercase
             lower_case_and_underscored_word.to_s.gsub(/\/(.?)/) { "::#{$1.upcase}" }.gsub(/(?:^|_)(.)/) { $1.upcase }
@@ -59,7 +68,6 @@ module Acoustic
         def constantize(camel_cased_word)
           names = camel_cased_word.split('::')
           names.shift if names.empty? || names.first.empty?
-          
           constant = Object
           names.each do |name|
             constant = constant.const_defined?(name) ? constant.const_get(name) : constant.const_missing(name)
@@ -76,6 +84,23 @@ module Acoustic
             {}
           end
         end
+        
+        def extract_regexp_and_capture_symbols(path)
+          regexp_parts = []
+          capture_symbols = []
+          path_parts = path.split(%r{/})
+          path_parts.reject! { |p| p.empty? }
+          path_parts.each do |part|
+            if part =~ /^:([a-z_]+)$/
+              capture_symbols << $1.intern
+              regexp_parts << "([A-Za-z0-9,_-]+)"
+            else
+              regexp_parts << Regexp.quote(part)
+            end
+          end
+          regexp = Regexp.new("^/#{regexp_parts.join('/')}$")
+          [regexp, capture_symbols]
+        end
     end
     
     class Configuration < Acoustic::Configuration
@@ -85,8 +110,8 @@ module Acoustic
         @rules = []
       end
       
-      def connect(path, options)
-        @rules << Rule.new(path, options[:controller], options[:action])
+      def connect(path, options = {})
+        @rules << Rule.new(path, options)
       end
       
       def mount(path, options)
