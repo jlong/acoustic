@@ -1,16 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
-require 'uri'
-require 'acoustic/controller'
 require 'acoustic/url_mapper'
-
-class TestController < Acoustic::Controller
-  def first; end
-  def second; end
-end
-
-class AnotherTestController < Acoustic::Controller
-  def index; end
-end
 
 describe Acoustic::UrlMapper do
   

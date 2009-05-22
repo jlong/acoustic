@@ -1,4 +1,4 @@
-require 'acoustic/configuration'
+require 'acoustic'
 
 module Acoustic
   class Settings < Configuration

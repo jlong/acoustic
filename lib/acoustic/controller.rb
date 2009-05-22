@@ -1,3 +1,5 @@
+require 'acoustic'
+
 module Acoustic
   class Controller
     

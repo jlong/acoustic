@@ -1,5 +1,5 @@
-require 'acoustic/errors'
-require 'acoustic/configuration'
+require 'uri'
+require 'acoustic'
 
 module Acoustic
   class UrlMapper

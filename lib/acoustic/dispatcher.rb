@@ -1,5 +1,4 @@
-require 'acoustic/url_mapper'
-require 'acoustic/controller'
+require 'acoustic'
 
 module Acoustic
   class Dispatcher

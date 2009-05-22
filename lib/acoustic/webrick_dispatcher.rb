@@ -1,5 +1,5 @@
 require 'webrick'
-require 'acoustic/dispatcher'
+require 'acoustic'
 
 module Acoustic
   class DispatchServlet < WEBrick::HTTPServlet::AbstractServlet

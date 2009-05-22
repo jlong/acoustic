@@ -7,7 +7,7 @@ module Acoustic
       @project_root = project_root
       add_load_path project_root
       add_load_path project_root + "/lib"
-      require "acoustic/settings"
+      require "acoustic"
       @config = Settings.new
       initialize_configuration
     end
