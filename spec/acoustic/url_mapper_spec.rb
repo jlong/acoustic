@@ -28,6 +28,11 @@ describe Acoustic::UrlMapper do
     lambda { resolve('/unresolvable') }.should raise_error(Acoustic::UnresolvableUriError)
   end
   
+  it 'should allow a wildcard rule' do
+    load :wildcard
+    resolve('/wildness').should == {:controller => :wildcard, :action=> :show, :url => "/wildness"}
+  end
+  
   def load(symbol)
     @mapper = Acoustic::UrlMapper.new
     @mapper.load(FIXTURES_ROOT + "/urls/#{symbol}.rb")

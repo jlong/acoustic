@@ -3,4 +3,4 @@
 # mount "hello/", "hello/urls"
 
 require 'hello/controllers'
-connect "/", :controller => :hello, :action => :show
+connect '*', :controller => :hello, :action => :show

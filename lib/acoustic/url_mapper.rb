@@ -68,20 +68,24 @@ module Acoustic
         end
         
         def extract_regexp_and_capture_symbols(path)
-          regexp_parts = []
-          capture_symbols = []
-          path_parts = path.split(%r{/})
-          path_parts.reject! { |p| p.empty? }
-          path_parts.each do |part|
-            if part =~ /^:([a-z_]+)$/
-              capture_symbols << $1.intern
-              regexp_parts << "([A-Za-z0-9,_-]+)"
-            else
-              regexp_parts << Regexp.quote(part)
+          if path == "*"
+            [/^(.*)$/, [:url]]
+          else
+            regexp_parts = []
+            capture_symbols = []
+            path_parts = path.split(%r{/})
+            path_parts.reject! { |p| p.empty? }
+            path_parts.each do |part|
+              if part =~ /^:([a-z_]+)$/
+                capture_symbols << $1.intern
+                regexp_parts << "([A-Za-z0-9,_-]+)"
+              else
+                regexp_parts << Regexp.quote(part)
+              end
             end
+            regexp = Regexp.new("^/#{regexp_parts.join('/')}$")
+            [regexp, capture_symbols]
           end
-          regexp = Regexp.new("^/#{regexp_parts.join('/')}$")
-          [regexp, capture_symbols]
         end
     end
     
