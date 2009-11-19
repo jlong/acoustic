@@ -27,4 +27,4 @@ class ArticlesController < Acoustic::Controller
     @article.destroy
   end
   
-def 
+end

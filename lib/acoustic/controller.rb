@@ -3,6 +3,19 @@ require 'acoustic'
 module Acoustic
   class Controller
     
+    class ViewContext #< BlankObject
+      def initialize(controller)
+        @controller = controller
+        @controller.instance_variables.each do |ivar|
+          instance_variable_set(ivar, @controller.instance_variable_get(ivar))
+        end
+      end
+      
+      def context
+        binding
+      end
+    end
+    
     def process(action, params, request, response)
       @_params, @_request, @_response = params, request, response
       response['Content-Type'] = "text/html"
@@ -10,7 +23,19 @@ module Acoustic
     end
     
     def render(options)
-      response.body = options[:text]
+      case
+      when options.has_key?(:text)
+        response.body = options[:text]
+      when options.has_key?(:template)
+        require 'erb'
+        filename = options[:template]
+        lines = IO.read(filename)
+        template = ERB.new(lines, 0, "%")
+        context = ViewContext.new(self)
+        response.body = template.result(context.instance_eval { binding })
+      else
+        raise 'invalid options passed to render'
+      end
     end
     
     # Class Methods

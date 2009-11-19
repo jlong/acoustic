@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+gem 'thor'
+require 'thor'
+
+module Acoustic
+  class Runner < Thor
+    desc "server [PORT]", "start the application in the current directory on on PORT"
+    def server(port="3000")
+      `script/server #{port}`
+    end
+  end
+end
+
+Acoustic::Runner.start
