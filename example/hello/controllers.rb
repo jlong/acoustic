@@ -1,5 +1,5 @@
 class HelloController < Acoustic::Controller
-  def show
+  def index
     render :text => "Hello World!"
   end
 end
