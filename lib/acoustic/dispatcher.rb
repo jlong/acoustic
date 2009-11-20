@@ -3,13 +3,13 @@ require 'acoustic'
 module Acoustic
   class Dispatcher
     
-    def initialize(project_root, config, mapper = UrlMapper)
+    def initialize(project_root, config, router = Router)
       @config = config
-      @mapper = mapper.load(File.join(project_root, 'urls.rb'))
+      @router = router.load(File.join(project_root, 'urls.rb'))
     end
     
     def service(request, response)
-      params = @mapper.resolve_uri(request.request_uri)
+      params = @router.resolve_uri(request.request_uri)
       controller = controller_from_symbol(params[:controller])
       action = params[:action]
       controller.process(action, params, request, response)

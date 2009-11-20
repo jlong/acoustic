@@ -2,10 +2,10 @@ require 'uri'
 require 'acoustic'
 
 module Acoustic
-  class UrlMapper
+  class Router
     
     def initialize
-      @config = UrlMapper::Configuration.new
+      @config = Router::Configuration.new
       @rules = []
     end
     

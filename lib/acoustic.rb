@@ -5,6 +5,6 @@ module Acoustic
   autoload "Controller",    "acoustic/controller"
   autoload "Dispatcher",    "acoustic/dispatcher"
   autoload "Settings",      "acoustic/settings"
-  autoload "UrlMapper",     "acoustic/url_mapper"
+  autoload "Router",     "acoustic/router"
   autoload "Dispatcher",    "acoustic/dispatcher"
 end

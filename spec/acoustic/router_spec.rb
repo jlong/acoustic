@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
-require 'acoustic/url_mapper'
+require 'acoustic/router'
 
-describe Acoustic::UrlMapper do
+describe Acoustic::Router do
   
   it 'should load an empty file without errors' do
     load :empty
@@ -39,11 +39,11 @@ describe Acoustic::UrlMapper do
   end
   
   def load(symbol)
-    @mapper = Acoustic::UrlMapper.new
-    @mapper.load(FIXTURES_ROOT + "/urls/#{symbol}.rb")
+    @router = Acoustic::Router.new
+    @router.load(FIXTURES_ROOT + "/urls/#{symbol}.rb")
   end
   
   def resolve(path)
-    @mapper.resolve_uri(URI.parse("http://localhost#{path}"))
+    @router.resolve_uri(URI.parse("http://localhost#{path}"))
   end
 end
