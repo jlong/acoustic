@@ -10,10 +10,6 @@ module Acoustic
           instance_variable_set(ivar, @controller.instance_variable_get(ivar))
         end
       end
-      
-      def context
-        binding
-      end
     end
     
     def process(action, params, request, response)
