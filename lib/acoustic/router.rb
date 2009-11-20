@@ -45,11 +45,10 @@ module Acoustic
       def extract(uri)
         matches = @regexp.match(uri.path)
         params = extract_params(uri)
-        params[:controller] = @options[:controller] if @options.has_key? :controller
-        params[:action] = @options[:action] if @options.has_key? :action
+        params.merge!(:controller => @options[:controller], :action => @options[:action])
         matches.captures.each_with_index do |value, index|
           key = @capture_symbols[index]
-          raise "key should never be nil!" if key.nil?
+          fail "key should never be nil!" if key.nil?
           value = value.intern if [:controller, :action].include?(key) && !value.nil?
           params[key] = value unless value.nil?
         end
@@ -80,16 +79,13 @@ module Acoustic
             path_parts.each do |part|
               if part =~ /^:([A-Za-z_]+)$/
                 capture_symbols << $1.intern
-                regexp_parts << part_string
+                regexp_parts << "/#{ part_string }"
               else
-                regexp_parts << Regexp.quote(part)
+                regexp_parts << "/#{ Regexp.quote(part) }"
               end
             end
-            if capture_symbols.last == :action
-              regexp = Regexp.new("^/#{ (regexp_parts[0...-1]).join('/') }(?:/#{ part_string }|)/?$")
-            else
-              regexp = Regexp.new("^/#{ regexp_parts.join('/') }/?$")
-            end
+            regexp_parts[-1] = "(?:/#{ part_string }|)" if capture_symbols.last == :action
+            regexp = Regexp.new("^#{ regexp_parts.join }/?$")
             [regexp, capture_symbols]
           end
         end
