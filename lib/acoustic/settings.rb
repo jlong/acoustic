@@ -3,9 +3,9 @@ require 'acoustic'
 module Acoustic
   class Settings < Configuration
     def gem(name, version = nil)
-      require 'rubygems'
+      Kernel.require 'rubygems'
       Kernel.send(:gem, name, version)
-      require name
+      Kernel.require name
     end
   end
 end
