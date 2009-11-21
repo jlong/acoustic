@@ -7,7 +7,8 @@ module Acoustic
     def initialize(server, options)
       @initializer = Initializer.instance
       @file_handler = WEBrick::HTTPServlet::FileHandler.new(server, options[:server_root])
-      @dispatcher = Acoustic::Dispatcher.new(@initializer.project_root, @initializer.config)
+      @router = @initializer.router
+      @dispatcher = Acoustic::Dispatcher.new(@router)
     end
     
     def service(request, response)

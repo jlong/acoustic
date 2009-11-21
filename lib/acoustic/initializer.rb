@@ -1,7 +1,7 @@
 module Acoustic
   class Initializer
     
-    attr_accessor :project_root, :config
+    attr_accessor :project_root, :config, :router
     
     def initialize(project_root)
       @project_root = project_root
@@ -9,6 +9,7 @@ module Acoustic
       add_load_path project_root + "/lib"
       require "acoustic"
       @config = Settings.new
+      @router = Router.load(project_root + "/urls.rb")
       initialize_configuration
     end
     
