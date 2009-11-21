@@ -1,21 +1,25 @@
 module Acoustic
   class Initializer
     
-    attr_accessor :project_root, :config, :router
+    attr_accessor :project_root, :settings, :router
     
     def initialize(project_root)
       @project_root = project_root
+      
       add_load_path project_root
       add_load_path project_root + "/lib"
+      
       require "acoustic"
-      @config = Settings.new
-      @router = Router.load(project_root + "/urls.rb")
-      initialize_configuration
+      
+      @settings = Settings.new
+      initialize_settings
+      
+      @router = Router.new
     end
     
     def run
-      config.load(project_root + "/settings.rb")
-      load_acoustic
+      load_settings
+      load_urls
     end
     
     class << self
@@ -34,12 +38,17 @@ module Acoustic
         $LOAD_PATH.uniq!
       end
       
-      def initialize_configuration
-        config[:additional_load_paths] = []
+      def initialize_settings
+        settings[:additional_load_paths] = []
       end
       
-      def load_acoustic
-        config[:additional_load_paths].reverse.each { add_load_path(path) }
+      def load_settings
+        settings.load(project_root + "/settings.rb")
+        settings[:additional_load_paths].reverse.each { add_load_path(path) }
+      end
+      
+      def load_urls
+        router.load(project_root + "/urls.rb")
       end
     
   end
