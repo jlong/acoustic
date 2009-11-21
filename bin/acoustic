@@ -10,6 +10,11 @@ module Acoustic
     def server(port="3000")
       `script/server #{port}`
     end
+    
+    desc "console", "boot IRB with the application in the current directory loaded"
+    def console
+      `script/console`
+    end
   end
 end
 
