@@ -4,17 +4,6 @@ require 'acoustic'
 module Acoustic
   class DispatchServlet < WEBrick::HTTPServlet::AbstractServlet
     
-    def self.dispatch(options)
-      server = WEBrick::HTTPServer.new(
-        :BindAddress => options[:ip],
-        :Port => options[:port],
-        :DocumentRoot => options[:server_root]
-      )
-      server.mount('/', self, options)
-      trap("INT") { server.shutdown }
-      server.start
-    end
-    
     def initialize(server, options)
       @initializer = Initializer.instance
       @file_handler = WEBrick::HTTPServlet::FileHandler.new(server, options[:server_root])
@@ -44,6 +33,20 @@ module Acoustic
         raise WEBrick::HTTPStatus::NotFound
       end
     end
-  
+    
+    module ClassMethods
+      def dispatch(options)
+        server = WEBrick::HTTPServer.new(
+          :BindAddress => options[:ip],
+          :Port => options[:port],
+          :DocumentRoot => options[:server_root]
+        )
+        server.mount('/', self, options)
+        trap("INT") { server.shutdown }
+        server.start
+      end
+    end
+    extend ClassMethods
+    
   end
 end

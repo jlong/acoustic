@@ -31,6 +31,6 @@ describe Acoustic::Settings do
   
   def load(symbol)
     @model = @settings = Acoustic::Settings.new
-    @settings.load(FIXTURES_ROOT + "/settings/#{symbol}.rb")
+    @settings.load(fixture_filename("settings", "#{symbol}.rb"))
   end
 end

@@ -34,10 +34,21 @@ module Acoustic
       end
     end
     
-    # Class Methods
-    def self.process(*args)
-      new.process(*args)
+    module ClassMethods
+      
+      def process(*args)
+        new.process(*args)
+      end
+      
+      def from_symbol(symbol)
+        name = Util.camelize("#{symbol}_controller")
+        Util.constantize(name)
+      rescue NameError
+        raise Acoustic::ControllerNameError.new(name)
+      end
+      
     end
+    extend ClassMethods
     
     protected
       

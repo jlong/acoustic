@@ -40,7 +40,7 @@ describe Acoustic::Router do
   
   def load(symbol)
     @router = Acoustic::Router.new
-    @router.load(FIXTURES_ROOT + "/urls/#{symbol}.rb")
+    @router.load(fixture_filename("urls", "#{symbol}.rb"))
   end
   
   def resolve(path)

@@ -1,0 +1,1 @@
+connect 'test/:action', :controller => :test

@@ -25,7 +25,18 @@ describe Acoustic::Controller do
     @controller.render(:template => template("hello_ivar.erb"))
   end
   
+  describe "Class Methods" do
+    
+    it 'from_symbol should resolve a symbol to a controller' do
+      Acoustic::Controller.from_symbol(:test).should == TestController
+    end
+    
+    it 'from_symbol should raise an error if the controller cannot be resolved' do
+      lambda { Acoustic::Controller.from_symbol(:bad) }.should raise_error(Acoustic::ControllerNameError, "Undefined controller BadController")
+    end
+  end
+  
   def template(filename)
-    File.join(FIXTURES_ROOT, "templates", filename)
+    fixture_filename("templates", filename)
   end
 end

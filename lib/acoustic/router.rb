@@ -24,10 +24,14 @@ module Acoustic
       end
     end
     
-    # Class Methods
-    def self.load(filename)
-      new.load(filename)
+    module ClassMethods
+      
+      def load(filename)
+        new.load(filename)
+      end
+      
     end
+    extend ClassMethods
     
     # Helper Classes
     
