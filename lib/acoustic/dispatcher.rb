@@ -11,7 +11,7 @@ module Acoustic
     
     def service(request, response)
       params = @router.resolve_uri(request.request_uri)
-      controller = Controller.from_symbol(params[:controller])
+      controller = Acoustic::Controller.from_symbol(params[:controller])
       action = params[:action]
       controller.process(action, params, request, response)
     rescue Acoustic::UnresolvableUriError, Acoustic::ControllerNameError
