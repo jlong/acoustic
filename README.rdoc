@@ -1,15 +1,16 @@
 == Acoustic
 
-Acoustic is a lightweight Web framework based loosely on Django and Rails.
-There are still plenty of things left to do, so it is highly experimental at
-this point. It really is just an experiment. Feel free to browse around in
-the source code, fork the project, or make something new.
+Acoustic is a lightweight Web framework based loosely on
+Django[http://djangoproject.com/] and Rails[http://rubyonrails.com]. There are
+still plenty of things left to do, so it is highly experimental at this point.
+It really is just an experiment. Feel free to browse around in the source
+code, fork the project, or make something new.
 
 === Project Goals
 
 Acoustic has the following goals:
 
-1. To be a "lightweight" web framework somewhere between Sinatra and Rails
+1. To be a "lightweight" web framework somewhere between Sinatra[http://www.sinatrarb.com/] and Rails
 2. To load fast enough to be used in pure CGI applications
 3. To be modular enough to share entire slices of the MVC between apps
 4. To require less files, generators, etc... than Rails
