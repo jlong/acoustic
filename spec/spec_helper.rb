@@ -4,8 +4,36 @@ LIB_ROOT = File.expand_path(SPEC_ROOT + '/../lib')
 
 $LOAD_PATH << LIB_ROOT
 
-class TestController
+class MockController
   def self.process(action, params, request, response)
+  end
+end
+
+class MockRequest
+  attr_accessor :uri
+  
+  def initialize(uri = "http://localhost/test/show")
+    @uri = uri
+  end
+  
+  def request_uri
+    URI.parse(@uri)
+  end
+end
+
+class MockResponse
+  attr_accessor :headers
+  
+  def initialize
+    @headers = {}
+  end
+  
+  def []=(key, value)
+    @headers[key] = value
+  end
+  
+  def [](key)
+    @headers[key]
   end
 end
 
