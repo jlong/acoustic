@@ -5,6 +5,18 @@ class TestController < Acoustic::Controller
   def show
     @name = "world"
   end
+  
+  def render(*args)
+    super if self.class.render
+  end
+  
+  def self.render=(value)
+    @render = value
+  end
+  
+  def self.render
+    @render
+  end
 end
 
 describe Acoustic::Controller do
@@ -40,6 +52,7 @@ describe Acoustic::Controller do
   
   describe '#process' do
     before :each do
+      TestController.render = false
       @controller = TestController.new
       @action = :show
       @params = {}
