@@ -1,24 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 require 'acoustic/controller'
 
-class TestController < Acoustic::Controller
-  def show
-    @name = "world"
-  end
-  
-  def render(*args)
-    super if self.class.render
-  end
-  
-  def self.render=(value)
-    @render = value
-  end
-  
-  def self.render
-    @render
-  end
-end
-
 describe Acoustic::Controller do
   
   before :each do
@@ -51,14 +33,18 @@ describe Acoustic::Controller do
   end
   
   describe '#process' do
+    
+    before :all do
+      require fixture_filename("hello", "controllers")
+    end
+    
     before :each do
-      TestController.render = false
-      @controller = TestController.new
+      @controller = HelloController.new
       @params = {}
     end
     
     it 'should set appropriate instance variables' do
-      process(:show)
+      process
       @controller.instance_variable_get("@_params").should be(@params)
       @controller.instance_variable_get("@_request").should be(@request)
       @controller.instance_variable_get("@_response").should be(@response)
@@ -66,32 +52,40 @@ describe Acoustic::Controller do
     
     it 'should set the content type on the response' do
       @response.should_receive(:[]=).with("Content-Type", "text/html")
-      process(:show)
+      process
     end
     
     it 'should call the appropriate action' do
       @controller.should_receive(:show)
-      process(:show)
+      process
       
       @controller.should_receive(:index)
       process(:index)
     end
     
     it 'should render the correct template for the action' do
-      require fixture_filename("hello", "controllers")
-      @controller = HelloController.new
-      process(:show)
+      process
       @response.body.should =~ /Hello World/
     end
     
-    def process(action)
-      @controller.process(action, @params, @request, @response)
+    it 'should render the template even if the method for the action does not exist' do
+      process(:index)
+      @response.body.should =~ /Testing 1, 2, 3.../
+    end
+    
+    it 'should raise a Acoustic::TemplateNotFound error if the template does not exist for the action' do
+      @controller = HelloController.new
+      lambda { process(:not_found) }.should raise_error(Acoustic::TemplateNotFoundError)
+    end
+    
+    def process(action = :show, params = @params, request = @request, response = @response)
+      @controller.process(action, params, request, response)
     end
   end
   
   describe "Class Methods" do
     it 'from_symbol should resolve a symbol to a controller' do
-      Acoustic::Controller.from_symbol(:test).should == TestController
+      Acoustic::Controller.from_symbol(:mock).should == MockController
     end
     
     it 'from_symbol should raise an error if the controller cannot be resolved' do

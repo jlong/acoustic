@@ -10,10 +10,10 @@ module Acoustic
       send(action) if respond_to?(action)
       unless @_rendered
         template = template_for(action)
-        if template
+        if template && File.file?(template)
           render :template => template
         else
-          raise TemplateNotFound.new(self, action)
+          raise TemplateNotFoundError.new(self, action)
         end
       end
     end
@@ -34,20 +34,17 @@ module Acoustic
       @_rendered = true
     end
     
+    # Return the template for <tt>action</tt>.
     def template_for(action)
       name = self.class.name
       name = $1 if name =~ /^(.*?)Controller$/
       name = Inflector.underscore(name)
-      relative_template_for("#{ name }_#{ action }")
+      absolute_template_filename_for("#{ name }_#{ action }.html.erb")
     end
     
-    def relative_template_for(filename)
-      actual_filename = nil
-      template_load_paths.find do |path|
-        actual_filename = File.expand_path(File.join(path, "#{ filename }.html.erb"))
-        File.file?(actual_filename)
-      end
-      actual_filename
+    # Return the absolute filename for a relative template filename.
+    def absolute_template_filename_for(relative_filename)
+      File.expand_path(File.join(self.class.template_load_path, relative_filename))
     end
     
     module ClassMethods
@@ -64,8 +61,8 @@ module Acoustic
         end
       end
       
-      def template_load_paths
-        @template_load_paths ||= [ File.expand_path(File.dirname(self.filename)) ]
+      def template_load_path
+        @template_load_path ||= File.expand_path(File.dirname(self.filename))
       end
       
       def process(*args)
@@ -98,10 +95,6 @@ module Acoustic
       
       def engine_for(string, options = {})
         ERB::Engine.new(string, :filename => options[:filename])
-      end
-      
-      def template_load_paths
-        @template_load_paths ||= self.class.template_load_paths
       end
     
   end
