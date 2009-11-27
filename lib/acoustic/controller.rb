@@ -3,25 +3,19 @@ require 'acoustic'
 module Acoustic
   class Controller
     
-    class ViewContext < BlankSlate      
-      def initialize(controller)
-        @controller = controller
-        @controller.instance_variables.each do |ivar|
-          instance_variable_set(ivar, @controller.instance_variable_get(ivar))
-        end
-        @erbout = nil
-      end
-      
-      def _erbout
-        @erbout
-      end
-    end
-    
     def process(action, params, request, response)
       @_params, @_request, @_response = params, request, response
       response['Content-Type'] = "text/html"
-      send(action)
-      render :template => template_for(action)
+      @_rendered = false
+      send(action) if respond_to?(action)
+      unless @_rendered
+        template = template_for(action)
+        if template
+          render :template => template
+        else
+          raise TemplateNotFound.new(self, action)
+        end
+      end
     end
     
     def render(options)
@@ -31,12 +25,29 @@ module Acoustic
       when options.has_key?(:template)
         filename = options[:template]
         string = IO.read(filename)
-        context = ViewContext.new(self)
+        view = View.new(self)
         engine = engine_for(string, :filename => filename)
-        response.body = engine.render(context)
+        response.body = engine.render(view)
       else
         raise 'invalid options passed to render'
       end
+      @_rendered = true
+    end
+    
+    def template_for(action)
+      name = self.class.name
+      name = $1 if name =~ /^(.*?)Controller$/
+      name = Inflector.underscore(name)
+      relative_template_for("#{ name }_#{ action }")
+    end
+    
+    def relative_template_for(filename)
+      actual_filename = nil
+      template_load_paths.find do |path|
+        actual_filename = File.expand_path(File.join(path, "#{ filename }.html.erb"))
+        File.file?(actual_filename)
+      end
+      actual_filename
     end
     
     module ClassMethods
@@ -53,8 +64,8 @@ module Acoustic
         end
       end
       
-      def template_path
-        File.expand_path(File.dirname(filename))
+      def template_load_paths
+        @template_load_paths ||= [ File.expand_path(File.dirname(self.filename)) ]
       end
       
       def process(*args)
@@ -85,16 +96,13 @@ module Acoustic
         @_params
       end
       
-      def template_for(action)
-        name = self.class.name
-        name = $1 if name =~ /^(.*?)Controller$/
-        name = Inflector.underscore(name)
-        "#{ File.dirname(self.class.filename) }/#{ name }_#{ action }.html.erb"
-      end
-      
       def engine_for(string, options = {})
         ERB::Engine.new(string, :filename => options[:filename])
       end
       
+      def template_load_paths
+        @template_load_paths ||= self.class.template_load_paths
+      end
+    
   end
 end

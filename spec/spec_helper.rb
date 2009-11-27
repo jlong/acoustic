@@ -22,7 +22,7 @@ class MockRequest
 end
 
 class MockResponse
-  attr_accessor :headers
+  attr_accessor :headers, :body
   
   def initialize
     @headers = {}

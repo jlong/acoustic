@@ -54,7 +54,6 @@ describe Acoustic::Controller do
     before :each do
       TestController.render = false
       @controller = TestController.new
-      @action = :show
       @params = {}
     end
     
@@ -78,9 +77,14 @@ describe Acoustic::Controller do
       process(:index)
     end
     
-    it 'should render the correct template for the action' 
+    it 'should render the correct template for the action' do
+      require fixture_filename("hello", "controllers")
+      @controller = HelloController.new
+      process(:show)
+      @response.body.should =~ /Hello World/
+    end
     
-    def process(action = :show)
+    def process(action)
       @controller.process(action, @params, @request, @response)
     end
   end

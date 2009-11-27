@@ -7,6 +7,7 @@ module Acoustic
   autoload "Inflector",     "acoustic/inflector"
   autoload "Router",        "acoustic/router"
   autoload "Settings",      "acoustic/settings"
+  autoload "View",          "acoustic/view"
   
   # Utility
   autoload "BlankSlate",    "acoustic/blank_slate"

@@ -11,6 +11,12 @@ module Acoustic
     end
   end
   
+  class TemplateNotFoundError < NameError
+    def initialize(controller, action)
+      super("Template not found for #{controller}##{action}")
+    end
+  end
+  
   # Thrown when accoustic cannot resolve a URL to a controller
   class ControllerNameError < NameError
     def initialize(controller_name)
