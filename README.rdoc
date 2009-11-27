@@ -1,10 +1,10 @@
 == Acoustic
 
 Acoustic is a lightweight Web framework based loosely on
-Django[http://djangoproject.com/] and Rails[http://rubyonrails.com]. There are
-still plenty of things left to do, so it is highly experimental at this point.
-It really is just an experiment. Feel free to browse around in the source
-code, fork the project, or make something new.
+Django[http://djangoproject.com/] and Rails[http://rubyonrails.com]. Right now
+Acoustic is highly experimental. You may find stuff that is incomplete or
+downright broken. Feel free to browse around in the source code, fork the
+project, or make something new.
 
 === Project Goals
 
