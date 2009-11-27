@@ -12,19 +12,19 @@ describe Acoustic::Controller do
   
   describe '#render' do
     it 'should render text' do
-      @response.should_receive(:body=).with("Hello World!")
       @controller.render(:text => "Hello World!")
+      @response.body.should =~ /Hello World!/
     end
     
     it 'should render erb templates' do
-      @response.should_receive(:body=).with("Hello John!")
       render("hello.erb")
+      @response.body.should =~ /Hello John!/
     end
     
     it 'should render instance variables from the controller to the erb template' do
       @controller.instance_variable_set("@name", "John")
-      @response.should_receive(:body=).with("Hello John!")
       render("hello_ivar.erb")
+      @response.body.should =~ /Hello John!/
     end
     
     def render(filename)
@@ -51,8 +51,8 @@ describe Acoustic::Controller do
     end
     
     it 'should set the content type on the response' do
-      @response.should_receive(:[]=).with("Content-Type", "text/html")
       process
+      @response.headers["Content-Type"].should == "text/html"
     end
     
     it 'should call the appropriate action' do
