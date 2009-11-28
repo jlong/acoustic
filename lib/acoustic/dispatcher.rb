@@ -9,14 +9,21 @@ module Acoustic
     end
   end
   
+  #
+  # The Acoustic::Dispatcher is used by webserver specific dispatchers to
+  # service a request and response.
+  #
   class Dispatcher
     
     attr_accessor :router
     
+    # Create a new dispatcher. Must be initialized with an Acoustic::Router object.
     def initialize(router)
       @router = router
     end
     
+    # Service a request and response. Use the router to extract the params from the
+    # URL, create the appropriate controller, and had control over to the controller.
     def service(request, response)
       params = @router.resolve_uri(request.request_uri)
       controller = Acoustic::Controller.from_symbol(params[:controller])

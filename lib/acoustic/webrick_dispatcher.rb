@@ -2,6 +2,10 @@ require 'webrick'
 require 'acoustic'
 
 module Acoustic
+  
+  #
+  # A Servelet for Webrick that services an Acoustic application.
+  #
   class DispatchServlet < WEBrick::HTTPServlet::AbstractServlet
     
     def initialize(server, options)

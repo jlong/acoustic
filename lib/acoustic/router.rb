@@ -3,26 +3,33 @@ require 'acoustic'
 
 module Acoustic
   
-  # Thrown when the Router cannot resolve a URI to a controller.
+  # Thrown when an Acoustic::Router cannot resolve a URI to a controller.
   class UnresolvableUri < StandardError
     def initialize(uri)
       super "Cannot resolve #{uri} to a controller"
     end
   end
   
+  #
+  # The Acoustic::Router is used to resolve routes (stored in urls.rb) to controllers
+  # and parameters.
+  #
   class Router
     
+    # Create a new router.
     def initialize
       @config = Router::Configuration.new
       @rules = []
     end
     
+    # Load a file that contains the route definitions (urls.rb).
     def load(filename)
       @config.load(filename)
       @rules.concat(@config.rules)
       self
     end
     
+    # Resolve a URI to the parameters.
     def resolve_uri(uri)
       rule = @rules.find { |r| r.match?(uri) }
       if rule
@@ -32,8 +39,10 @@ module Acoustic
       end
     end
     
+    # Class methods for Acoustic::Router
     module ClassMethods
       
+      # Load a file that contains route definitions (urls.rb).
       def load(filename)
         new.load(filename)
       end
@@ -43,7 +52,7 @@ module Acoustic
     
     # Helper Classes
     
-    class Rule
+    class Rule #:nodoc:
       def initialize(path, options)
         @path, @options = path, options
         @regexp, @capture_symbols = extract_regexp_and_capture_symbols(path)
@@ -103,6 +112,10 @@ module Acoustic
         end
     end
     
+    #
+    # The Acoustic::Router::Configuration class is a helper class that is used to
+    # load and store the information contained in a routes file (urls.rb).
+    #
     class Configuration < Acoustic::Configuration
       attr_accessor :rules
       
@@ -110,10 +123,12 @@ module Acoustic
         @rules = []
       end
       
+      # Contect a path with a controller.
       def connect(path, options = {})
         @rules << Rule.new(path, options)
       end
       
+      # Moutes a "mini" app at a specific path. Not implemented yet.
       def mount(path, options)
         #noop
       end

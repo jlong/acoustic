@@ -1,3 +1,4 @@
+# :include: README.rdoc
 module Acoustic
   
   # Main Objects
