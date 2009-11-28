@@ -1,19 +1,38 @@
 require 'acoustic'
 
 module Acoustic
+  
+  # Thrown when a controller cannot find a template for a given action.
+  class TemplateNotFound < NameError
+    def initialize(controller, action)
+      super("Template not found for #{controller}##{action}")
+    end
+  end
+  
+  # Thrown when accoustic cannot resolve a URL to a controller.
+  class ControllerNameError < NameError
+    def initialize(controller_name)
+      super "Undefined controller #{controller_name}"
+    end
+  end
+  
   class Controller
     
     def process(action, params, request, response)
       @_params, @_request, @_response = params, request, response
+      
       response['Content-Type'] = "text/html"
+      
       @_rendered = false
+      
       send(action) if respond_to?(action)
+      
       unless @_rendered
         template = template_for(action)
-        if template && File.file?(template)
+        if File.file?(template)
           render :template => template
         else
-          raise TemplateNotFoundError.new(self, action)
+          raise TemplateNotFound.new(self, action)
         end
       end
     end

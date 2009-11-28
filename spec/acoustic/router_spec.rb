@@ -25,7 +25,7 @@ describe Acoustic::Router do
   
   it 'should raise an error when the URI cannot be resolved' do
     load :empty
-    lambda { resolve('/unresolvable') }.should raise_error(Acoustic::UnresolvableUriError)
+    lambda { resolve('/unresolvable') }.should raise_error(Acoustic::UnresolvableUri)
   end
   
   it 'should allow a wildcard rule' do

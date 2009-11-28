@@ -30,7 +30,7 @@ module Acoustic
     def handle_dispatch(request, response)
       begin
         @dispatcher.service(request, response)
-      rescue Acoustic::NotFoundError
+      rescue Acoustic::NotFound
         raise WEBrick::HTTPStatus::NotFound
       end
     end

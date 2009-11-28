@@ -1,6 +1,6 @@
-require "acoustic/errors"
-
 module Acoustic
+  
+  # Main Objects
   autoload "Configuration", "acoustic/configuration"
   autoload "Controller",    "acoustic/controller"
   autoload "Dispatcher",    "acoustic/dispatcher"
@@ -12,4 +12,5 @@ module Acoustic
   # Utility
   autoload "BlankSlate",    "acoustic/blank_slate"
   autoload "ERB",           "acoustic/erb"
+  
 end

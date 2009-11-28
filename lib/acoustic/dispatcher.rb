@@ -1,6 +1,14 @@
 require 'acoustic'
 
 module Acoustic
+  
+  # Thrown when the dispatcher cannot resolve a resource from a URL.
+  class NotFound < StandardError
+    def initialize(uri)
+      super "Resource not found for #{uri}"
+    end
+  end
+  
   class Dispatcher
     
     attr_accessor :router
@@ -14,8 +22,8 @@ module Acoustic
       controller = Acoustic::Controller.from_symbol(params[:controller])
       action = params[:action]
       controller.process(action, params, request, response)
-    rescue Acoustic::UnresolvableUriError, Acoustic::ControllerNameError
-      raise Acoustic::NotFoundError.new(request.request_uri)
+    rescue Acoustic::UnresolvableUri, Acoustic::ControllerNameError
+      raise Acoustic::NotFound.new(request.request_uri)
     end
     
   end

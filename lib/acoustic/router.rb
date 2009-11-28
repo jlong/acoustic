@@ -2,6 +2,14 @@ require 'uri'
 require 'acoustic'
 
 module Acoustic
+  
+  # Thrown when the Router cannot resolve a URI to a controller.
+  class UnresolvableUri < StandardError
+    def initialize(uri)
+      super "Cannot resolve #{uri} to a controller"
+    end
+  end
+  
   class Router
     
     def initialize
@@ -20,7 +28,7 @@ module Acoustic
       if rule
         rule.extract(uri)
       else
-        raise Acoustic::UnresolvableUriError
+        raise Acoustic::UnresolvableUri.new(uri)
       end
     end
     

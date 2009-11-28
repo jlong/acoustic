@@ -24,17 +24,17 @@ describe Acoustic::Dispatcher do
     service(@request, @response)
   end
   
-  it 'should rescue Acoustic::UnresolvableUriError and raise an Acoustic::NotFoundError' do
+  it 'should rescue Acoustic::UnresolvableUriError and raise an Acoustic::NotFound' do
     @router = Acoustic::Router.load(fixture_filename("dispatcher", "one_controller_urls.rb"))
     @request = MockRequest.new("http://localhost/404")
-    lambda { service(@request, @response) }.should raise_error(Acoustic::NotFoundError, "Resource not found for http://localhost/404")
+    lambda { service(@request, @response) }.should raise_error(Acoustic::NotFound, "Resource not found for http://localhost/404")
   end
   
-  it 'should rescue Acoustic::ControllerNameError when the controller is not found and raise an Acoustic::NotFoundError' do
+  it 'should rescue Acoustic::ControllerNameError when the controller is not found and raise an Acoustic::NotFound' do
     @request = MockRequest.new("http://localhost/bad")
     lambda {
       service(@request, @response)
-    }.should raise_error(Acoustic::NotFoundError, "Resource not found for http://localhost/bad")    
+    }.should raise_error(Acoustic::NotFound, "Resource not found for http://localhost/bad")    
   end
   
   def service(request, response)

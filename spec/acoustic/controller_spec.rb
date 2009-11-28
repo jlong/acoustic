@@ -75,7 +75,7 @@ describe Acoustic::Controller do
     
     it 'should raise a Acoustic::TemplateNotFound error if the template does not exist for the action' do
       @controller = HelloController.new
-      lambda { process(:not_found) }.should raise_error(Acoustic::TemplateNotFoundError)
+      lambda { process(:not_found) }.should raise_error(Acoustic::TemplateNotFound)
     end
     
     def process(action = :show, params = @params, request = @request, response = @response)
