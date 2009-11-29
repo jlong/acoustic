@@ -1,6 +1,6 @@
 require 'acoustic'
 
-module Acoustic
+module Acoustic #:nodoc:
   #
   # The Acoustic::Inflector module provides a number of helper methods for converting
   # strings to classes and vice versa.

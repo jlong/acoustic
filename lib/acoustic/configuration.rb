@@ -1,4 +1,4 @@
-module Acoustic
+module Acoustic #:nodoc:
   #
   # The Acoustic::Configuration class provides a base class for the many different
   # kinds of configuration used by Acoustic, including Acoustic::Settings and

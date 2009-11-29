@@ -1,6 +1,6 @@
 require 'acoustic'
 
-module Acoustic
+module Acoustic #:nodoc:
   #
   # The Acoustic::Settings class is used to load and store the information
   # contained in an Acoustic settings file (settings.rb).

@@ -11,7 +11,7 @@ project, or make something new.
 Acoustic has the following goals:
 
 1. To be a "lightweight" web framework somewhere between Sinatra[http://www.sinatrarb.com/] and Rails
-2. To load fast enough to be used in pure CGI applications
+2. To load fast enough to be used in CGI applications
 3. To be modular enough to share entire slices of the MVC between apps
 4. To require less files, generators, etc... than Rails
 

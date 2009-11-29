@@ -1,4 +1,4 @@
-module Acoustic
+module Acoustic #:nodoc:
   #
   # The template for an action is evaluated on Acoustic::View.
   #

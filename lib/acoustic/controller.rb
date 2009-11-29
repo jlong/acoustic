@@ -1,6 +1,6 @@
 require 'acoustic'
 
-module Acoustic
+module Acoustic #:nodoc:
   
   # Thrown when a controller cannot find a template for a given action.
   class TemplateNotFound < NameError
@@ -18,8 +18,8 @@ module Acoustic
   
   #
   # An Acoustic::Controller is very similar to it's Rails counterpart. Actions
-  # are encapselated in methods. Views are assumed to be in the same directory
-  # as the file where the controller is defined.
+  # are encapselated in methods. Views are automatically rendered for the action
+  # if they exist.
   # 
   # For example:
   #
@@ -40,6 +40,9 @@ module Acoustic
   #
   # The second action, <tt>create</tt>, is used to create a new guest based on the
   # parameters passed to the action in the <tt>params</tt> hash.
+  #
+  # One key difference with Rails is that views are assumed to be in the same
+  # directory as the file where the controller was defined.
   #
   class Controller
     

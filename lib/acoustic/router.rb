@@ -1,7 +1,7 @@
 require 'uri'
 require 'acoustic'
 
-module Acoustic
+module Acoustic #:nodoc:
   
   # Thrown when an Acoustic::Router cannot resolve a URI to a controller.
   class UnresolvableUri < StandardError

@@ -1,4 +1,4 @@
-module Acoustic
+module Acoustic #:nodoc:
   module ERB
     #
     # This class provides the same API for ERB as the HAML::Engine class for HAML.

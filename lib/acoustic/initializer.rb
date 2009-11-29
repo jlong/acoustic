@@ -1,4 +1,4 @@
-module Acoustic
+module Acoustic #:nodoc:
   #
   # The Acoustic::Initializer bootstraps an Acoustic project. It adds the appropriate
   # directories to the load path and loads the settings.rb and urls.rb files in the

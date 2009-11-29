@@ -1,6 +1,6 @@
 require 'acoustic'
 
-module Acoustic
+module Acoustic #:nodoc:
   
   # Thrown when the dispatcher cannot resolve a resource from a URL.
   class NotFound < StandardError

@@ -1,7 +1,7 @@
 require 'webrick'
 require 'acoustic'
 
-module Acoustic
+module Acoustic #:nodoc:
   
   #
   # A Servelet for Webrick that services an Acoustic application.
