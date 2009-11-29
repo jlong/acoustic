@@ -70,8 +70,12 @@ describe Acoustic::Controller do
       @response.body.should =~ /Testing 1, 2, 3.../
     end
     
-    it 'should raise a Acoustic::TemplateNotFound error if the template does not exist for the action' do
-      lambda { process(:not_found) }.should raise_error(Acoustic::TemplateNotFound)
+    it 'should raise an Acoustic::TemplateNotFound error if the template does not exist for the action' do
+      lambda { process(:no_template) }.should raise_error(Acoustic::TemplateNotFound)
+    end
+    
+    it 'should raise an Acoustic::ActionNameError if neither the action nor the template exists' do
+      lambda { process(:no_action_or_template) }.should raise_error(Acoustic::ActionNameError)
     end
     
     it 'should render a template with the layout in the same directory' do

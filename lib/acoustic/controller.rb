@@ -16,6 +16,13 @@ module Acoustic #:nodoc:
     end
   end
   
+  # Thrown when neither the action nor a template exists for an action on a controller.
+  class ActionNameError < NameError
+    def initialize(controller, action)
+      super "Undefined action #{action} for #{controller}"
+    end
+  end
+  
   #
   # An Acoustic::Controller is very similar to it's Rails counterpart. Actions
   # are encapselated in methods. Views are automatically rendered for the action
@@ -59,7 +66,11 @@ module Acoustic #:nodoc:
         if File.file?(template)
           render :template => template
         else
-          raise TemplateNotFound.new(self, action)
+          if respond_to? action
+            raise TemplateNotFound.new(self, action)
+          else
+            raise ActionNameError.new(self, action)
+          end
         end
       end
     end
