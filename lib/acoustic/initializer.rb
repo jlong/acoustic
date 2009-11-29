@@ -15,6 +15,7 @@ module Acoustic #:nodoc:
     def initialize(project_root)
       @project_root = project_root
       
+      add_load_path File.expand_path(File.join(File.dirname(__FILE__), '..'))
       add_load_path project_root
       add_load_path project_root + "/lib"
       
