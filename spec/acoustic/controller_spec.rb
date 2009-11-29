@@ -1,12 +1,12 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 require 'acoustic/controller'
 
-require fixture_filename("hello", "controllers")
+require fixture_filename("controller", "controllers")
 
 describe Acoustic::Controller do
   
   before :each do
-    @controller = HelloController.new
+    @controller = TestController.new
     @request = MockRequest.new
     @response = MockResponse.new
     @controller.instance_variable_set('@_response', @response)

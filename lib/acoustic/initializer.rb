@@ -4,7 +4,7 @@ module Acoustic #:nodoc:
   # directories to the load path and loads the settings.rb and urls.rb files in the
   # root of the project.
   #
-  # There is no need to access this class directly within your project.
+  # There is no need to use this class directly within your project.
   #
   class Initializer
     
