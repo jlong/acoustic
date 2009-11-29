@@ -4,6 +4,10 @@ module Acoustic #:nodoc:
   #
   class View < BlankSlate
     
+    # The rendered content of the view
+    attr_accessor :content
+    
+    # The controller that is rendering the view
     attr_reader :controller
     
     def initialize(controller)
@@ -18,9 +22,9 @@ module Acoustic #:nodoc:
       @erbout
     end
     
-=begin
-    # This is extracted from Rails
     def capture_erb(&block)
+      # This method has been extracted from Rails
+      
       buffer = _erbout
       pos = buffer.length
       block.call
@@ -63,50 +67,8 @@ module Acoustic #:nodoc:
     #
     
     def render(options)
-      partial = options.delete(:partial)
-      template = options.delete(:template)
-      case
-      when partial
-        render_partial(partial)
-      when template
-        render_template(template)
-      else
-        raise "render options not supported #{options.inspect}"
-      end
+      fail "Unimplemented"
     end
     
-    protected
-      
-      def render_partial(partial)
-        render_template(partial, :partial => true)
-      end
-      
-      def render_template(template, options={})
-        path = File.dirname(parser.script_filename)
-        if template =~ %r{^/}
-          template = template[1..-1]
-          path = Dir.pwd
-        end
-        filename = template_filename(File.join(path, template), :partial => options.delete(:partial))
-        if File.file?(filename)
-          parser.parse_file(filename)
-        else
-          raise "File does not exist #{filename.inspect}"
-        end
-      end
-      
-      def template_filename(name, options)
-        path = File.dirname(name)
-        template = File.basename(name)
-        template = "_" + template if options.delete(:partial)
-        template += extname(parser.script_filename) unless name =~ /\.[a-z]{3,4}$/
-        File.join(path, template)
-      end
-      
-      def extname(filename)
-        /(\.[a-z]{3,4}\.[a-z]{3,4})$/.match(filename)
-        $1 || File.extname(filename) || ''
-      end
-=end
   end
 end

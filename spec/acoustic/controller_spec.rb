@@ -1,10 +1,12 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 require 'acoustic/controller'
 
+require fixture_filename("hello", "controllers")
+
 describe Acoustic::Controller do
   
   before :each do
-    @controller = Acoustic::Controller.new
+    @controller = HelloController.new
     @request = MockRequest.new
     @response = MockResponse.new
     @controller.instance_variable_set('@_response', @response)
@@ -34,12 +36,7 @@ describe Acoustic::Controller do
   
   describe '#process' do
     
-    before :all do
-      require fixture_filename("hello", "controllers")
-    end
-    
     before :each do
-      @controller = HelloController.new
       @params = {}
     end
     
@@ -74,8 +71,12 @@ describe Acoustic::Controller do
     end
     
     it 'should raise a Acoustic::TemplateNotFound error if the template does not exist for the action' do
-      @controller = HelloController.new
       lambda { process(:not_found) }.should raise_error(Acoustic::TemplateNotFound)
+    end
+    
+    it 'should render a template with the layout in the same directory' do
+      process(:index)
+      @response.body.should =~ /<html/
     end
     
     def process(action = :show, params = @params, request = @request, response = @response)

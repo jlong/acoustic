@@ -52,11 +52,9 @@ module Acoustic #:nodoc:
       
       response['Content-Type'] = "text/html"
       
-      @_rendered = false
-      
       send(action) if respond_to?(action)
       
-      unless @_rendered
+      unless rendered?
         template = template_for(action)
         if File.file?(template)
           render :template => template
@@ -76,15 +74,25 @@ module Acoustic #:nodoc:
       when options.has_key?(:text)
         response.body = options[:text]
       when options.has_key?(:template)
-        filename = options[:template]
-        string = IO.read(filename)
+        template_filename = options[:template]
+        template_string = IO.read(template_filename)
         view = View.new(self)
-        engine = engine_for(string, :filename => filename)
-        response.body = engine.render(view)
+        template_engine = engine_for(template_string, :filename => template_filename)
+        view.content = template_engine.render(view)
+        if has_layout?
+          layout_string = IO.read(layout)
+          layout_engine = engine_for(layout_string, :filename => layout)
+          response.body = layout_engine.render(view) do |*args|
+            view.get_content_for(*args)
+          end
+        else
+          response.body = view.content
+        end
       else
         raise 'invalid options passed to render'
       end
       @_rendered = true
+      response.body
     end
     
     # Return the template for <tt>action</tt>.
@@ -100,8 +108,18 @@ module Acoustic #:nodoc:
       File.expand_path(File.join(self.class.template_load_path, relative_filename))
     end
     
+    def has_layout?
+      File.exists?(layout)
+    end
+    
+    def layout
+      @layout ||= absolute_template_filename_for("layout.html.erb")
+    end
+    
     module ClassMethods
       
+      # The filename where the class was defined. This is derived when the abstract
+      # class is subclassed.
       attr_reader :filename
       
       def inherited(klass) #:nodoc:
@@ -157,10 +175,13 @@ module Acoustic #:nodoc:
       def params
         @_params
       end
-    
+      
+      def rendered?
+        @_rendered == true
+      end
     private
       
-      # Create a new Rendering engine for a template. Currently only supports
+      # Create a new rendering engine for a template. Currently only supports
       # ERB, but will eventually have support for other engines.
       def engine_for(string, options = {}) #:nodoc:
         ERB::Engine.new(string, :filename => options[:filename])
