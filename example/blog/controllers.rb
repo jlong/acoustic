@@ -12,6 +12,10 @@ class ArticlesController < Acoustic::Controller
     @articles = Article.find(:all)
   end
   
+  def show
+    @article = Article.find(params[:id])
+  end
+  
   def edit
     @article = Article.find(params[:id])
   end
@@ -27,4 +31,14 @@ class ArticlesController < Acoustic::Controller
     @article.destroy
   end
   
+end
+
+class CommentsController < Acoustic::Controller
+  def create
+    params.delete(:action) # nasty
+    params.delete(:controller) # nasty
+    @comment = Comment.create(params) # clean up to use params[:comment]
+    @_rendered = true # nasty
+    response.set_redirect(WEBrick::HTTPStatus::TemporaryRedirect, '/blog/articles/show?id=' + params[:article_id])
+  end
 end

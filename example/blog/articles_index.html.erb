@@ -1,6 +1,8 @@
 <h1>Articles</h1>
 
 <% for article in @articles %>
-<h3><%= article.title %></h3>
+<hr />
+<h3><a href="/blog/articles/show?id=<%= article.id %>"><%= article.title %></a></h3>
 <%= article.body_html %>
+<p><%= article.comments.count %> Comments</p>
 <% end %>
