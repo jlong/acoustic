@@ -1,7 +1,0 @@
-#!/usr/bin/env ruby
-
-libs = []
-libs << "-r irb/completion"
-libs << "-r #{ File.expand_path(File.dirname(__FILE__) + '/../') + '/boot' }"
-
-exec "irb #{ libs.join(' ') } #{ ARGV.join(' ') } --simple-prompt"
