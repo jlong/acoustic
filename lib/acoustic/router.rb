@@ -79,7 +79,7 @@ module Acoustic #:nodoc:
       private
         
         def extract_params(uri)
-          q = uri.query
+          q = unescape(uri.query)
           if q
             pairs = q.split('&')
             pairs.inject({}) { |h, pair| k,v = pair.split('=', 2); h[k.intern] = v; h }
@@ -109,6 +109,10 @@ module Acoustic #:nodoc:
             regexp = Regexp.new("^#{ regexp_parts.join }/?$")
             [regexp, capture_symbols]
           end
+        end
+        
+        def unescape(string)
+          URI.unescape(string).gsub('+', ' ')
         end
     end
     

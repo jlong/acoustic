@@ -14,6 +14,7 @@ describe Acoustic::Router do
     resolve('/another/').should == {:controller => :another_test, :action => :index}
     resolve('/another?test=1').should == {:controller => :another_test, :action => :index, :test=>'1'}
     resolve('/another/?test1=1&test2=2').should == {:controller => :another_test, :action => :index, :test1=>'1', :test2=>'2'}
+    resolve('/another/?test%203=three%2Ffour').should == {:controller => :another_test, :action => :index, :'test 3'=>"three/four"}
   end
   
   it 'should resolve a URI with params in the path' do

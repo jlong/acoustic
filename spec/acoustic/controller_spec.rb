@@ -14,7 +14,6 @@ describe Acoustic::Controller do
   end
   
   describe '#redirect_to' do
-    
     it 'should redirect and not render the default template' do
       @controller.redirect_to 'this/path'
       @response['location'].should == 'http://localhost/this/path'
@@ -22,7 +21,6 @@ describe Acoustic::Controller do
       @response.body.should match(%r{this/path})
       @controller.should be_rendered
     end
-    
   end
   
   describe '#render' do
