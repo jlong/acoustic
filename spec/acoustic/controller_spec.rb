@@ -51,11 +51,11 @@ describe Acoustic::Controller do
       @params = {}
     end
     
-    it 'should set appropriate instance variables' do
+    it 'should set params, request, and response' do
       process
-      @controller.instance_variable_get("@_params").should be(@params)
-      @controller.instance_variable_get("@_request").should be(@request)
-      @controller.instance_variable_get("@_response").should be(@response)
+      @controller.send(:params).should be(@params)
+      @controller.send(:request).should be(@request)
+      @controller.send(:response).should be(@response)
     end
     
     it 'should set the content type on the response' do
