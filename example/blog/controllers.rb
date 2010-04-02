@@ -39,6 +39,5 @@ class CommentsController < Acoustic::Controller
     params.delete(:controller) # nasty
     @comment = Comment.create(params) # clean up to use params[:comment]
     redirect_to '/blog/articles/show?id=' + params[:article_id]
-    #response.set_redirect(WEBrick::HTTPStatus::TemporaryRedirect, '/blog/articles/show?id=' + params[:article_id])
   end
 end
