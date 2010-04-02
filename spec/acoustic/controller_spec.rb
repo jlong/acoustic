@@ -9,7 +9,20 @@ describe Acoustic::Controller do
     @controller = TestController.new
     @request = MockRequest.new
     @response = MockResponse.new
+    @controller.instance_variable_set('@_request', @request)
     @controller.instance_variable_set('@_response', @response)
+  end
+  
+  describe '#redirect_to' do
+    
+    it 'should redirect and not render the default template' do
+      @controller.redirect_to 'this/path'
+      @response['location'].should == 'http://localhost/this/path'
+      @response['status'].should == '302 Found'
+      @response.body.should match(%r{this/path})
+      @controller.should be_rendered
+    end
+    
   end
   
   describe '#render' do

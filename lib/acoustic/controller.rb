@@ -106,6 +106,42 @@ module Acoustic #:nodoc:
       response.body
     end
     
+    def redirect_to(path)
+      path = full_url_for(path)
+      response['location'] = path
+      response['status'] = "302 Found"
+      render :text => %{
+        <html>
+          <head>
+            <title>302 Found</title>
+            <meta http-equiv="refresh" content="0;url=#{path}" />
+          </head>
+          <body>
+            <script>window.location="#{path}"</script>
+            <noscript>Redirecting to <a href="#{path}">#{path}</a></noscript>
+          </body>
+        </html>
+      }.strip.gsub(/\s+/, ' ')
+    end
+    
+    # Return the full URL for path based on the request URI.
+    # TODO: handle HTTPS and default ports for other protocols correctly
+    def full_url_for(path)
+      path = full_path_for(path)
+      uri = request.request_uri
+      host = uri.scheme + "://" + uri.host
+      port = uri.port
+      host << ":#{port}" unless port == 80
+      "#{host}#{path}"
+    end
+    
+    # Return the full path for the relative path
+    # TODO: support relative paths
+    def full_path_for(path)
+      path = "/#{path}" unless path[0..0] == '/'
+      path
+    end
+    
     # Return the template for <tt>action</tt>.
     def template_for(action)
       name = self.class.name
