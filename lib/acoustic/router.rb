@@ -112,7 +112,7 @@ module Acoustic #:nodoc:
         end
         
         def unescape(string)
-          URI.unescape(string).gsub('+', ' ')
+          URI.unescape(string).gsub('+', ' ') unless string.nil?
         end
     end
     

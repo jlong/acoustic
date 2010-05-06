@@ -226,6 +226,7 @@ module Acoustic #:nodoc:
       def rendered?
         @_rendered == true
       end
+    
     private
       
       # Create a new rendering engine for a template. Currently only supports
